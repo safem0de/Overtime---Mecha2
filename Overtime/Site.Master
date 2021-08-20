@@ -1,0 +1,209 @@
+﻿<%@ Master Language="VB" AutoEventWireup="true" CodeBehind="Site.master.vb" Inherits="Overtime.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - Overtime Mecha</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <style>
+        #myBtn {
+          display: none; /* Hidden by default */
+          position: fixed; /* Fixed/sticky position */
+          bottom: 20px; /* Place the button at the bottom of the page */
+          right: 30px; /* Place the button 30px from the right */
+          z-index: 99; /* Make sure it does not overlap */
+          border: none; /* Remove borders */
+          outline: none; /* Remove outline */
+          background-color: red; /* Set a background color */
+          color: white; /* Text color */
+          cursor: pointer; /* Add a mouse pointer on hover */
+          padding: 15px; /* Some padding */
+          border-radius: 10px; /* Rounded corners */
+          font-size: 18px; /* Increase font size */
+        }
+
+        #myBtn:hover {
+          background-color: #555; /* Add a dark-grey background on hover */
+}
+    </style>
+
+    <script src="Scripts/Chart.js"></script>
+    <script src="Scripts/Chart.min.js"></script>
+    <script src="Scripts/jquery-3.4.1.js"></script>
+    <script src="Scripts/jquery-3.4.1.min.js"></script>
+    <%--<script src="Scripts/chartjs-plugin-datalabels.js"></script>
+    <script src="Scripts/chartjs-plugin-datalabels.min.js"></script>--%>
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <%--<div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" runat="server" href="~/">Application name</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a runat="server" href="~/">Home</a></li>
+                        <li><a runat="server" href="~/About">About</a></li>
+                        <li><a runat="server" href="~/Contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>--%>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <a class="navbar-brand" href="~/" runat="server">Overtime's MECHA</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <%--<li class="nav-item active">
+                        <a class="nav-link" href="~/" runat="server">Home <span class="sr-only">(current)</span></a>
+                    </li>--%>
+                    <li class="nav-item dropdown">
+                        <%--<a class="nav-link" href="~/Manpower" runat="server">จัดระบบพนักงาน</a>--%>
+                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMan" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            จัดระบบพนักงาน
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMan">
+                            <a class="dropdown-item" href="~/Manpower" runat="server">รายชื่อพนักงานทั้งหมด (Manpower Management)</a>
+                            <a class="dropdown-item" href="~/EmployeeActionRequest" runat="server">เปลี่ยนกะ/กระบวนการ (Employee Action Request)</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="~/EmployeeAction" runat="server">อัพเดทสถานะงาน (E.A.R)</a>
+                            <a class="dropdown-item" href="~/Authorize" runat="server">กำหนดสิทธิ์ผู้ใช้งาน (Authorization)</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownOt" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            รีเควส-โอที
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownOt">
+                            <a class="dropdown-item" href="~/EmployeeRequest" runat="server">รีเควส-โอที (พนักงานรีเควส)</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="~/LeaderConfirm" runat="server">คอนเฟริ์ม-โอที (ยืนยันการรีเควส)</a>
+                            <a class="dropdown-item" href="~/LeaderRequest" runat="server">หัวหน้ารีเควส-โอที (ลีดเดอร์รีเควส)</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item disabled" href="~/EditOvertime" runat="server">แก้ไข-โอที (Manual Edit)</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="~/AllOvertime" runat="server">ดูรายการทั้งหมด (See All Request)</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdd" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            เพิ่มรายการต่างๆ
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownAdd">
+                            <a class="dropdown-item" href="~/AddProcess" runat="server">เพิ่มกระบวนการ (Add Process)</a>
+                            <a class="dropdown-item" href="~/AddPosition" runat="server">เพิ่มตำแหน่ง (Add Position)</a>
+                            <a class="dropdown-item" href="~/AddCompany" runat="server">เพิ่มบริษัท (Add Company)</a>
+                            <a class="dropdown-item" href="~/AddSection" runat="server">เพิ่มหน่วยงาน (Add Section)</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownClerk" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ระบบเอกสาร
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownAdd">
+                            <a class="dropdown-item" href="Download.aspx" runat="server">ดาวน์โหลด (Download)</a>
+                            <a class="dropdown-item" href="~/Print" runat="server">พิมพ์ใบรีเควสโอที (Print OT Request)</a>
+                            <a class="dropdown-item" href="~/PrintEAR" runat="server">พิมพ์ใบเปลี่ยนกะ (Print EAR Request)</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="~/RegisterUsers" runat="server">รายชื่อผู้ที่ลงทะเบียนแล้ว (Registered Users)</a>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-md-auto">
+                    <li class="nav-inline m-1">
+                    <a href="~/Login" class="btn btn-outline-info my-2 my-sm-0" runat="server" id="login">
+                      <i class="fas fa-user"></i> Login
+                    </a>
+                </li>
+                <li class="nav-inline m-1">
+                    <a href="~/Register" class="btn btn-outline-success my-2 my-sm-0" runat="server" id="register">
+                      <i class="fas fa-id-card"></i> Register
+                    </a>
+                </li>
+                    <li class="nav-inline m-1">
+                    <asp:Label ID="LblWelcome" runat="server" Text=""></asp:Label>
+                    <a href="#" runat="server" onServerClick="Logout" class="btn btn-outline-danger" id="logoutz">
+                    <i class="fas fa-key"></i> Logout
+                </a>
+                </ul>
+            </div>
+        </nav>
+        <div class="container body-content">
+            <br />
+            <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            <hr />
+            <footer>
+                <p>&copy; <%: DateTime.Now.Year %> - Overtime Mecha by Safem0de</p>
+                <a href="~/Downloads/69.0.3497.100_chrome_installer_32.exe" runat="server">GoogleChrome(X86)</a>
+                <a href="~/Downloads/69.0.3497.100_chrome_installer x64.exe" runat="server">GoogleChrome(X64)</a>
+            </footer>
+        </div>
+
+    </form>
+    
+    <script>
+        //Get the button
+        var mybutton = document.getElementById("myBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
+</body>
+</html>
